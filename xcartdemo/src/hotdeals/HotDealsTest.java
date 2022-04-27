@@ -127,39 +127,31 @@ public class HotDealsTest extends Utility {
         clickOnMouseHoverOnElement(By.xpath("//ul[@class='nav navbar-nav top-main-menu']/li[2]/ul[1]/li[2]/child::a"));
         //Verify the text
         assertVerifyText(By.tagName("h1"),"Bestsellers");
-        /*//actual product list
-        List<WebElement> originalProductList = driver.findElements(By.xpath("//div[@class='star-single']"));
+        //actual product list
+        List<WebElement> originalProductList = driver.findElements(By.xpath("//div[@class='stars-row full']"));
         //create the list object
         List<Object> sortPriceList = new ArrayList();
-       *//* add all web element value to list object*//*
+        /*add all web element value to list object
+        & Get width of rating*/
         for (WebElement element : originalProductList) {
-            System.out.println(sortPriceList.add(element.getSize()));
-            sortPriceList.add((element.getSize()));
-            String actualText =element.getText();
-            String actualTextS = String.valueOf(element.getSize());
-
-            System.out.println("actual Text: "+actualText);
-            System.out.println("actual Text size: "+actualTextS);
+        sortPriceList.add(String.valueOf(element.getAttribute("style")));
         }
+        Collections.sort(sortPriceList,Collections.reverseOrder());
         //sort by Rates
         mouseHoverOnElement(By.className("sort-by-label"));
         clickOnElement(By.xpath("//*[@id=\"XLite-Module-CDev-Bestsellers-View-BestsellersPage-sortby-1\"]/li[6]/a"));
         Thread.sleep(1000);
-        List<WebElement> actualProductListElements = driver.findElements(By.xpath("//div[@class='star-single']"));
+        List<WebElement> actualProductListElements = driver.findElements(By.xpath("//div[@class='stars-row full']"));
         //create the list object
         List<Object> actualPriceList = new ArrayList();
-        *//*remove $ sign and add the sortPriceList
-        add all web element value to list object*//*
+        /*
+        add all web element value to list object*/
         for (WebElement element : actualProductListElements) {
-            actualPriceList.add(element.getSize());
-            String expectedText =element.getText();
+            actualPriceList.add(element.getAttribute("style"));
         }
-        Assert.assertEquals(sortPriceList, actualPriceList);*/
-
-
-
+        //verification by Star rating width
+        Assert.assertEquals(sortPriceList, actualPriceList);
     }
-
     @After
     public void tearDown(){
         closeBrowser();

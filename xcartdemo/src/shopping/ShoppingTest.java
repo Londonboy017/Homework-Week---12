@@ -17,13 +17,13 @@ public class ShoppingTest extends Utility {
 
     @Test
     public void verifyThatUserShouldPlaceOrderSuccessfullyForVinylIdolzGhostbusters() throws InterruptedException {
-        mouseHoverOnElement(By.xpath("//div[@class='collapse navbar-collapse']/ul/li[2]/span"));
+       mouseHoverOnElement(By.xpath("//div[@class='collapse navbar-collapse']/ul/li[2]/span"));
         clickOnMouseHoverOnElement(By.xpath("//*[@id=\"header-area\"]/div[1]/div/div[4]/div/ul/li[2]/ul/li[2]/a/span"));
 
         assertVerifyText(By.id("page-title"), "Bestsellers");
         mouseHoverOnElement(By.xpath("//div[@class='sort-box']"));
         clickOnMouseHoverOnElement(By.linkText("Name A - Z"));
-
+        Thread.sleep(1000);
         mouseHoverOnElement(By.xpath("//*[@id=\"content\"]/div/div/div[2]/div/div/div[3]/ul/li[7]/div/div[1]/a/img"));
         Thread.sleep(2000);
         clickOnMouseHoverOnElement(By.xpath("//ul[@class = 'products-grid grid-list']/li[8]/div/div[2]/div[4]/div/button"));
@@ -36,23 +36,31 @@ public class ShoppingTest extends Utility {
         clickOnElement(By.linkText("View cart"));
 
         assertVerifyText(By.id("page-title"), "Your shopping cart - 1 item");
+        //verify sub total
+        assertVerifyText(By.xpath("//*[@id=\"shopping-cart\"]/ul/li/span/span/span"),"$19.99");
+        //verify the Total price
+        assertVerifyText(By.xpath("//*[@id=\"cart-right\"]/ul/li[4]/span/span"),"$25.84");
 
         clickOnElement(By.xpath("//span[text()='Go to checkout']"));
         assertVerifyText(By.xpath("//h3[contains(text(),'Log in to your account')]"), "Log in to your account");
-        sendTextToElement(By.id("email"), "abc@gmail.com");
+        sendTextToElement(By.id("email"), "stuart193@gmail.com");
         clickOnElement(By.xpath("//span[contains(text(),'Continue')]"));
         assertVerifyText(By.xpath("//*[@id=\"content\"]/div/div/div/div/div/h1"), "Secure Checkout");
         sendTextToElement(By.id("shippingaddress-firstname"), "abc");
         sendTextToElement(By.id("shippingaddress-lastname"), "xyz");
         sendTextToElement(By.id("shippingaddress-street"), "abc street");
         sendTextToElement(By.id("shippingaddress-custom-state"), "xyz");
+        clickOnElement(By.xpath("//input[@id='create_profile']"));//click on checkbox
+        sendTextToElement(By.xpath("//input[@id='password']"),"Strut12");//enter pswrd
         Thread.sleep(2000);
-        clickOnElement(By.id("method128"));
-        clickOnElement(By.id("pmethod6"));
-
+        clickOnElement(By.id("method128"));//Local shipping
+        clickOnElement(By.id("pmethod6"));//COD
+        //verify total
+        Thread.sleep(1000);
+        assertVerifyText(By.xpath("//*[@id='content']/div/div/div/div/div/div/div[2]/div[2]/div[1]/div[3]/span[2]/span/span"),"$26.86");
         Thread.sleep(2000);
         clickOnElement(By.xpath("//body/div[@id='page-wrapper']/div[@id='page']/div[@id='main-wrapper']/div[@id='main']/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/form[1]/div[4]/button[1]"));
-
+        //verify the text
         assertVerifyText(By.xpath("//h1[@id='page-title']"), "Thank you for your order");
     }
 

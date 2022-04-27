@@ -25,7 +25,7 @@ public class TestSuite extends Utility {
     }
 
     @Test
-    public void VerifyPriceOrderLowToHigh() throws InterruptedException,NumberFormatException {
+    public void VerifyPriceOrderLowToHigh() throws InterruptedException, NumberFormatException {
         //click on computers
         clickOnElement(By.xpath("//body/div[6]/div[2]/ul[1]/li[1]/a[1]"));
         //click on Desktop
@@ -34,24 +34,29 @@ public class TestSuite extends Utility {
         Thread.sleep(1000);
         List<WebElement> beforeFilter = driver.findElements(By.xpath("//span[contains(@class, 'actual-price')]"));
         List<Double> beforeFilterPriceList = new ArrayList();
-
-        for (WebElement p : beforeFilter) {
-            beforeFilterPriceList.add(Double.parseDouble(p.getText().trim().replace(",", "").replace(",", "")));
-           // boolean check = Ordering.natural().isOrdered(beforeFilterPriceList);
+        try {
+            for (WebElement p : beforeFilter) {
+                beforeFilterPriceList.add(Double.parseDouble(p.getText().trim().replace("$", "").replace(",", "")));
+            }
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("Check 1");
         }
-
+        //arrange price list in low to high order
+        Collections.sort(beforeFilterPriceList);
         //sort by Price : Low to High
         selectByValueFromDropDown(By.id("products-orderby"), "10");
         Thread.sleep(1000);
         List<WebElement> afterFilter = driver.findElements(By.xpath("//span[contains(@class, 'actual-price')]"));
         List<Double> afterFilterPriceList = new ArrayList<>();
-
-        for (WebElement q : afterFilter) {
-           afterFilterPriceList.add(Double.parseDouble(q.getText().replace("$","").replace(",","")));
+        try {
+            for (WebElement q : afterFilter) {
+                afterFilterPriceList.add(Double.parseDouble(q.getText().replace("$", "").replace(",", "")));
+            }
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("check 2");
         }
 
-        Collections.sort(beforeFilterPriceList,Collections.reverseOrder());
-       Assert.assertEquals(beforeFilterPriceList, afterFilterPriceList);
+        Assert.assertEquals("Check low to high price", beforeFilterPriceList, afterFilterPriceList);
     }
     @Test
     public void verifyProductAddedToShoppingCartSuccessFully() throws ElementClickInterceptedException, InterruptedException {
